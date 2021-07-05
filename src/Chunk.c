@@ -3,6 +3,7 @@
 #include "Simplex.h"
 
 #include <memory.h>
+#include <stdlib.h>
 
 void Chunk_Create(Chunk* chunk, vec3 center, u32 width, u32 height, u32 depth, GLuint shader) {
     *chunk = (Chunk){
@@ -22,7 +23,7 @@ void Chunk_Create(Chunk* chunk, vec3 center, u32 width, u32 height, u32 depth, G
     for (u32 x = 0; x < width; x++) {
         for (u32 y = 0; y < height; y++) {
             for (u32 z = 0; z < depth; z++) {
-                DynamicArrayPush(chunk->Blocks, BlockID_Stone);
+                DynamicArrayPush(chunk->Blocks, snoise3(x * 0.5f, y * 0.5f, z * 0.5f) > 0.5 ? BlockID_Stone : BlockID_Air);
             }
         }
     }
@@ -42,8 +43,10 @@ void Chunk_Create(Chunk* chunk, vec3 center, u32 width, u32 height, u32 depth, G
                     continue;
                 }
 
+                // TODO: Clockwise order of vertices for backface culling
+
                 // Top
-                {
+                if ((y == height - 1) || (chunk->Blocks[x + ((y + 1) * width) + (z * width * height)] == BlockID_Air)) {
                     DynamicArrayPush(chunk->Vertices, ((Vertex){
                         .Position = {
                             -0.5f + position[0],
@@ -103,22 +106,319 @@ void Chunk_Create(Chunk* chunk, vec3 center, u32 width, u32 height, u32 depth, G
 
                     currentIndex += 4;
                 }
+
+                // Bottom
+                if ((y == 0) || (chunk->Blocks[x + ((y - 1) * width) + (z * width * height)] == BlockID_Air)) {
+                    DynamicArrayPush(chunk->Vertices, ((Vertex){
+                        .Position = {
+                            -0.5f + position[0],
+                            -0.5f + position[1],
+                             0.5f + position[2],
+                        },
+                        .Normal = {
+                             0.0f,
+                            -1.0f,
+                             0.0f,
+                        },
+                    }));
+                    DynamicArrayPush(chunk->Vertices, ((Vertex){
+                        .Position = {
+                             0.5f + position[0],
+                            -0.5f + position[1],
+                             0.5f + position[2],
+                        },
+                        .Normal = {
+                             0.0f,
+                            -1.0f,
+                             0.0f,
+                        },
+                    }));
+                    DynamicArrayPush(chunk->Vertices, ((Vertex){
+                        .Position = {
+                             0.5f + position[0],
+                            -0.5f + position[1],
+                            -0.5f + position[2],
+                        },
+                        .Normal = {
+                             0.0f,
+                            -1.0f,
+                             0.0f,
+                        },
+                    }));
+                    DynamicArrayPush(chunk->Vertices, ((Vertex){
+                        .Position = {
+                            -0.5f + position[0],
+                            -0.5f + position[1],
+                            -0.5f + position[2],
+                        },
+                        .Normal = {
+                             0.0f,
+                            -1.0f,
+                             0.0f,
+                        },
+                    }));
+
+                    DynamicArrayPush(chunk->Indices, currentIndex + 0);
+                    DynamicArrayPush(chunk->Indices, currentIndex + 1);
+                    DynamicArrayPush(chunk->Indices, currentIndex + 2);
+
+                    DynamicArrayPush(chunk->Indices, currentIndex + 0);
+                    DynamicArrayPush(chunk->Indices, currentIndex + 2);
+                    DynamicArrayPush(chunk->Indices, currentIndex + 3);
+
+                    currentIndex += 4;
+                }
+
+                // Left
+                if ((x == 0) || (chunk->Blocks[(x - 1) + (y * width) + (z * width * height)] == BlockID_Air)) {
+                    DynamicArrayPush(chunk->Vertices, ((Vertex){
+                        .Position = {
+                            -0.5f + position[0],
+                             0.5f + position[1],
+                            -0.5f + position[2],
+                        },
+                        .Normal = {
+                            -1.0f,
+                             0.0f,
+                             0.0f,
+                        },
+                    }));
+                    DynamicArrayPush(chunk->Vertices, ((Vertex){
+                        .Position = {
+                            -0.5f + position[0],
+                             0.5f + position[1],
+                             0.5f + position[2],
+                        },
+                        .Normal = {
+                            -1.0f,
+                             0.0f,
+                             0.0f,
+                        },
+                    }));
+                    DynamicArrayPush(chunk->Vertices, ((Vertex){
+                        .Position = {
+                            -0.5f + position[0],
+                            -0.5f + position[1],
+                             0.5f + position[2],
+                        },
+                        .Normal = {
+                            -1.0f,
+                             0.0f,
+                             0.0f,
+                        },
+                    }));
+                    DynamicArrayPush(chunk->Vertices, ((Vertex){
+                        .Position = {
+                            -0.5f + position[0],
+                            -0.5f + position[1],
+                            -0.5f + position[2],
+                        },
+                        .Normal = {
+                            -1.0f,
+                             0.0f,
+                             0.0f,
+                        },
+                    }));
+
+                    DynamicArrayPush(chunk->Indices, currentIndex + 0);
+                    DynamicArrayPush(chunk->Indices, currentIndex + 1);
+                    DynamicArrayPush(chunk->Indices, currentIndex + 2);
+
+                    DynamicArrayPush(chunk->Indices, currentIndex + 0);
+                    DynamicArrayPush(chunk->Indices, currentIndex + 2);
+                    DynamicArrayPush(chunk->Indices, currentIndex + 3);
+
+                    currentIndex += 4;
+                }
+
+                // Right
+                if ((x == width - 1) || (chunk->Blocks[(x + 1) + (y * width) + (z * width * height)] == BlockID_Air)) {
+                    DynamicArrayPush(chunk->Vertices, ((Vertex){
+                        .Position = {
+                             0.5f + position[0],
+                             0.5f + position[1],
+                            -0.5f + position[2],
+                        },
+                        .Normal = {
+                             1.0f,
+                             0.0f,
+                             0.0f,
+                        },
+                    }));
+                    DynamicArrayPush(chunk->Vertices, ((Vertex){
+                        .Position = {
+                             0.5f + position[0],
+                             0.5f + position[1],
+                             0.5f + position[2],
+                        },
+                        .Normal = {
+                             1.0f,
+                             0.0f,
+                             0.0f,
+                        },
+                    }));
+                    DynamicArrayPush(chunk->Vertices, ((Vertex){
+                        .Position = {
+                             0.5f + position[0],
+                            -0.5f + position[1],
+                             0.5f + position[2],
+                        },
+                        .Normal = {
+                             1.0f,
+                             0.0f,
+                             0.0f,
+                        },
+                    }));
+                    DynamicArrayPush(chunk->Vertices, ((Vertex){
+                        .Position = {
+                             0.5f + position[0],
+                            -0.5f + position[1],
+                            -0.5f + position[2],
+                        },
+                        .Normal = {
+                             1.0f,
+                             0.0f,
+                             0.0f,
+                        },
+                    }));
+
+                    DynamicArrayPush(chunk->Indices, currentIndex + 0);
+                    DynamicArrayPush(chunk->Indices, currentIndex + 1);
+                    DynamicArrayPush(chunk->Indices, currentIndex + 2);
+
+                    DynamicArrayPush(chunk->Indices, currentIndex + 0);
+                    DynamicArrayPush(chunk->Indices, currentIndex + 2);
+                    DynamicArrayPush(chunk->Indices, currentIndex + 3);
+
+                    currentIndex += 4;
+                }
+
+                // Front
+                if ((z == depth - 1) || (chunk->Blocks[x + (y * width) + ((z + 1) * width * height)] == BlockID_Air)) {
+                    DynamicArrayPush(chunk->Vertices, ((Vertex){
+                        .Position = {
+                            -0.5f + position[0],
+                             0.5f + position[1],
+                             0.5f + position[2],
+                        },
+                        .Normal = {
+                             0.0f,
+                             0.0f,
+                             1.0f,
+                        },
+                    }));
+                    DynamicArrayPush(chunk->Vertices, ((Vertex){
+                        .Position = {
+                             0.5f + position[0],
+                             0.5f + position[1],
+                             0.5f + position[2],
+                        },
+                        .Normal = {
+                             0.0f,
+                             0.0f,
+                             1.0f,
+                        },
+                    }));
+                    DynamicArrayPush(chunk->Vertices, ((Vertex){
+                        .Position = {
+                             0.5f + position[0],
+                            -0.5f + position[1],
+                             0.5f + position[2],
+                        },
+                        .Normal = {
+                             0.0f,
+                             0.0f,
+                             1.0f,
+                        },
+                    }));
+                    DynamicArrayPush(chunk->Vertices, ((Vertex){
+                        .Position = {
+                            -0.5f + position[0],
+                            -0.5f + position[1],
+                             0.5f + position[2],
+                        },
+                        .Normal = {
+                             0.0f,
+                             0.0f,
+                             1.0f,
+                        },
+                    }));
+
+                    DynamicArrayPush(chunk->Indices, currentIndex + 0);
+                    DynamicArrayPush(chunk->Indices, currentIndex + 1);
+                    DynamicArrayPush(chunk->Indices, currentIndex + 2);
+
+                    DynamicArrayPush(chunk->Indices, currentIndex + 0);
+                    DynamicArrayPush(chunk->Indices, currentIndex + 2);
+                    DynamicArrayPush(chunk->Indices, currentIndex + 3);
+
+                    currentIndex += 4;
+                }
+
+                // Front
+                if ((z == 0) || (chunk->Blocks[x + (y * width) + ((z - 1) * width * height)] == BlockID_Air)) {
+                    DynamicArrayPush(chunk->Vertices, ((Vertex){
+                        .Position = {
+                            -0.5f + position[0],
+                             0.5f + position[1],
+                            -0.5f + position[2],
+                        },
+                        .Normal = {
+                             0.0f,
+                             0.0f,
+                            -1.0f,
+                        },
+                    }));
+                    DynamicArrayPush(chunk->Vertices, ((Vertex){
+                        .Position = {
+                             0.5f + position[0],
+                             0.5f + position[1],
+                            -0.5f + position[2],
+                        },
+                        .Normal = {
+                             0.0f,
+                             0.0f,
+                            -1.0f,
+                        },
+                    }));
+                    DynamicArrayPush(chunk->Vertices, ((Vertex){
+                        .Position = {
+                             0.5f + position[0],
+                            -0.5f + position[1],
+                            -0.5f + position[2],
+                        },
+                        .Normal = {
+                             0.0f,
+                             0.0f,
+                            -1.0f,
+                        },
+                    }));
+                    DynamicArrayPush(chunk->Vertices, ((Vertex){
+                        .Position = {
+                            -0.5f + position[0],
+                            -0.5f + position[1],
+                            -0.5f + position[2],
+                        },
+                        .Normal = {
+                             0.0f,
+                             0.0f,
+                            -1.0f,
+                        },
+                    }));
+
+                    DynamicArrayPush(chunk->Indices, currentIndex + 0);
+                    DynamicArrayPush(chunk->Indices, currentIndex + 1);
+                    DynamicArrayPush(chunk->Indices, currentIndex + 2);
+
+                    DynamicArrayPush(chunk->Indices, currentIndex + 0);
+                    DynamicArrayPush(chunk->Indices, currentIndex + 2);
+                    DynamicArrayPush(chunk->Indices, currentIndex + 3);
+
+                    currentIndex += 4;
+                }
             }
         }
     }
-
-    // DynamicArrayPush(chunk->Vertices, ((Vertex){ .Position = { -0.5f,  0.5f, 0.0f }, .Normal = { 0.0f, 0.0f, -1.0f } }));
-    // DynamicArrayPush(chunk->Vertices, ((Vertex){ .Position = {  0.5f,  0.5f, 0.0f }, .Normal = { 0.0f, 0.0f, -1.0f } }));
-    // DynamicArrayPush(chunk->Vertices, ((Vertex){ .Position = {  0.5f, -0.5f, 0.0f }, .Normal = { 0.0f, 0.0f, -1.0f } }));
-    // DynamicArrayPush(chunk->Vertices, ((Vertex){ .Position = { -0.5f, -0.5f, 0.0f }, .Normal = { 0.0f, 0.0f, -1.0f } }));
-
-    // DynamicArrayPush(chunk->Indices, 0);
-    // DynamicArrayPush(chunk->Indices, 1);
-    // DynamicArrayPush(chunk->Indices, 3);
-
-    // DynamicArrayPush(chunk->Indices, 1);
-    // DynamicArrayPush(chunk->Indices, 2);
-    // DynamicArrayPush(chunk->Indices, 3);
 
     glGenBuffers(1, &chunk->VertexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, chunk->VertexBuffer);

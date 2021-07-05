@@ -138,7 +138,7 @@ int main(int argc, char** argv) {
         "layout(location = 0) in vec3 v_Normal;\n"
         "\n"
         "void main() {\n"
-        "   o_Color = vec4(1.0, 0.0, 0.0, 1.0) * min(1.0, max(0.3, 2.0 * dot(v_Normal, normalize(vec3(0.4, 1.0, -0.3)))));\n"
+        "   o_Color = vec4(vec3(1.0, 0.0, 0.0) * (dot(v_Normal, normalize(vec3(0.4, 1.0, -0.3))) + 1.0) * 0.5, 1.0f);\n"
         "}\n";
 
     GLuint shader = 0;
