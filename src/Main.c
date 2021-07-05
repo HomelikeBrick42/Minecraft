@@ -36,6 +36,7 @@ static b8 SPressed = FALSE;
 static b8 DPressed = FALSE;
 static b8 QPressed = FALSE;
 static b8 EPressed = FALSE;
+static b8 ShiftPressed = FALSE;
 static void WindowKeyCallback(Window* window, u32 key, b8 pressed, void* userData) {
     switch (key) {
         case 'W': {
@@ -72,6 +73,10 @@ static void WindowKeyCallback(Window* window, u32 key, b8 pressed, void* userDat
                     Window_UnlockCursor(window);
                 }
             }
+        } break;
+
+        case 0x10: {
+            ShiftPressed = pressed;
         } break;
 
         default: {
@@ -138,7 +143,7 @@ int main(int argc, char** argv) {
         "layout(location = 0) in vec3 v_Normal;\n"
         "\n"
         "void main() {\n"
-        "   o_Color = vec4(vec3(1.0, 0.0, 0.0) * (dot(v_Normal, normalize(vec3(0.4, 1.0, -0.3))) + 1.0) * 0.5, 1.0f);\n"
+        "   o_Color = vec4(vec3(0.8, 0.8, 0.8) * (dot(v_Normal, normalize(vec3(0.4, 1.0, -0.3))) + 1.0) * 0.5, 1.0f);\n"
         "}\n";
 
     GLuint shader = 0;
@@ -199,6 +204,9 @@ int main(int argc, char** argv) {
             glm_vec3_normalize(up);
 
             f32 MoveSpeed = -(4.0f * dt);
+            if (ShiftPressed) {
+                MoveSpeed *= 3.0f;
+            }
 
             if (WPressed) {
                 vec3 move = {};
