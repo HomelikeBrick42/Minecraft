@@ -143,7 +143,7 @@ int main(int argc, char** argv) {
         "layout(location = 0) in vec3 v_Normal;\n"
         "\n"
         "void main() {\n"
-        "   o_Color = vec4(vec3(0.8, 0.8, 0.8) * (dot(v_Normal, normalize(vec3(0.4, 1.0, -0.3))) + 1.0) * 0.5, 1.0f);\n"
+        "   o_Color = vec4(vec3(0.8, 0.8, 0.8) * max(0.3, (dot(v_Normal, normalize(vec3(0.4, 1.0, -0.3))) + 1.0) * 0.5), 1.0f);\n"
         "}\n";
 
     GLuint shader = 0;
@@ -157,7 +157,7 @@ int main(int argc, char** argv) {
     };
 
     glm_mat4_identity(camera.ProjectionMatrix);
-    glm_perspective(70 * cast(f32) (M_PI / 180.0), 0.75f, 0.001f, 1000.0f, camera.ProjectionMatrix);
+    glm_perspective(70 * cast(f32) (M_PI / 180.0), 0.75f, 0.01f, 1000.0f, camera.ProjectionMatrix);
 
     Window_SetResizeCallback(window, WindowResizeCallback, &camera);
 
