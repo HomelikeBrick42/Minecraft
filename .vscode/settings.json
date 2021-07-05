@@ -1,0 +1,27 @@
+{
+    "files.associations": {
+        "*.lang": "jai",
+        "cglm.h": "c",
+        "vec2.h": "c",
+        "common.h": "c",
+        "string.h": "c",
+        "mat4.h": "c",
+        "windows.h": "c",
+        "array": "c",
+        "chrono": "c",
+        "list": "c",
+        "vector": "c",
+        "forward_list": "c",
+        "xstring": "c",
+        "xutility": "c",
+        "algorithm": "c",
+        "iterator": "c",
+        "ios": "c",
+        "type_traits": "c",
+        "cmath": "c",
+        "stdio.h": "c",
+        "stdlib.h": "c",
+        "dynamicarray.h": "c",
+        "chunk.h": "c"
+    }
+}
