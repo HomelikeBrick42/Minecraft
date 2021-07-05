@@ -355,7 +355,7 @@ void Chunk_Create(Chunk* chunk, vec3 center, u32 width, u32 height, u32 depth, G
                     currentIndex += 4;
                 }
 
-                // Front
+                // Back
                 if ((z == 0) || (chunk->Blocks[x + (y * width) + ((z - 1) * width * height)] == BlockID_Air)) {
                     DynamicArrayPush(chunk->Vertices, ((Vertex){
                         .Position = {
