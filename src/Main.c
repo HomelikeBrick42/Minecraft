@@ -151,7 +151,7 @@ int main(int argc, char** argv) {
 
     Camera camera = {};
     camera.Transform = (Transform){
-        .Position = { 0.0f, 0.0f, 2.0f },
+        .Position = { 0.0f, 0.0f, 80.0f },
         .Rotation = { 0.0f, 0.0f, 0.0f },
         .Scale = { 1.0f, 1.0f, 1.0f },
     };
@@ -240,7 +240,7 @@ int main(int argc, char** argv) {
             }
         }
 
-        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+        glClearColor(0.4f, 0.6f, 0.8f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
         Chunk_Draw(&chunk, &camera);
