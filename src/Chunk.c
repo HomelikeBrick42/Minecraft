@@ -23,7 +23,7 @@ void Chunk_Create(Chunk* chunk, vec3 center, u32 width, u32 height, u32 depth, G
     for (u32 x = 0; x < width; x++) {
         for (u32 y = 0; y < height; y++) {
             for (u32 z = 0; z < depth; z++) {
-                DynamicArrayPush(chunk->Blocks, snoise3(x * 0.5f, y * 0.5f, z * 0.5f) > 0.5 ? BlockID_Stone : BlockID_Air);
+                DynamicArrayPush(chunk->Blocks, snoise3(x * 0.1f, y * 0.1f, z * 0.1f) < 0.5 ? BlockID_Stone : BlockID_Air);
             }
         }
     }

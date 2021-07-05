@@ -157,7 +157,7 @@ int main(int argc, char** argv) {
     Window_SetResizeCallback(window, WindowResizeCallback, &camera);
 
     Chunk chunk = {};
-    Chunk_Create(&chunk, (vec3){ 0.0f, 0.0f, 0.0f }, 16, 16, 16, shader);
+    Chunk_Create(&chunk, (vec3){ 0.0f, 0.0f, 0.0f }, 64, 64, 64, shader);
 
     Window_Show(window);
     Window_LockCursor(window);
