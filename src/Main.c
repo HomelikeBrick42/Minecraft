@@ -76,7 +76,7 @@ static void WindowKeyCallback(Window* window, u32 key, b8 pressed, void* userDat
             }
         } break;
 
-        case 0x1B: { // TODO: This is escape replace this later
+        case 0x1B: { // TODO: This is escape replace this later its windows specific
             static b8 Locked = TRUE;
             if (pressed) {
                 Locked = !Locked;
@@ -88,7 +88,7 @@ static void WindowKeyCallback(Window* window, u32 key, b8 pressed, void* userDat
             }
         } break;
 
-        case 0x10: {
+        case 0x10: { // TODO: This is shift but also a windows specific keycode!
             ShiftPressed = pressed;
         } break;
 
@@ -193,11 +193,12 @@ int main(int argc, char** argv) {
     while (TRUE) {
         Clock_Update(&clock);
         f32 dt = cast(f32) (clock.Elapsed - lastTime);
+        printf("FPS: %f\r", 1.0f / dt);
 
         // Camera movement
         {
             camera.Transform.Rotation[1] -= cast(f32) MouseXDelta * 0.5f;
-            camera.Transform.Rotation[1] = fmod(camera.Transform.Rotation[1], 360.0f);
+            camera.Transform.Rotation[1] = fmodf(camera.Transform.Rotation[1], 360.0f);
 
             camera.Transform.Rotation[0] -= cast(f32) MouseYDelta * 0.5f;
 
@@ -210,9 +211,9 @@ int main(int argc, char** argv) {
             }
 
             vec3 forward = {};
-            forward[0] = sin(camera.Transform.Rotation[1] * cast(f32) (M_PI / 180.0)) * cos(camera.Transform.Rotation[0] * cast(f32) (M_PI / 180.0));
-            forward[1] = -sin(camera.Transform.Rotation[0] * cast(f32) (M_PI / 180.0));
-            forward[2] = cos(camera.Transform.Rotation[1] * cast(f32) (M_PI / 180.0)) * cos(camera.Transform.Rotation[0] * cast(f32) (M_PI / 180.0));
+            forward[0] = sinf(camera.Transform.Rotation[1] * cast(f32) (M_PI / 180.0)) * cosf(camera.Transform.Rotation[0] * cast(f32) (M_PI / 180.0));
+            forward[1] = -sinf(camera.Transform.Rotation[0] * cast(f32) (M_PI / 180.0));
+            forward[2] = cosf(camera.Transform.Rotation[1] * cast(f32) (M_PI / 180.0)) * cosf(camera.Transform.Rotation[0] * cast(f32) (M_PI / 180.0));
             glm_vec3_normalize(forward);
 
             vec3 right = {};
