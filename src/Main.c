@@ -63,6 +63,17 @@ static void WindowKeyCallback(Window* window, u32 key, b8 pressed, void* userDat
             EPressed = pressed;
         } break;
 
+        case 'R': {
+            if (pressed) {
+                glDisable(GL_CULL_FACE);
+                glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            } else {
+                glEnable(GL_CULL_FACE);
+                glCullFace(GL_BACK);
+                glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            }
+        } break;
+
         case 0x1B: { // TODO: This is escape replace this later
             static b8 Locked = TRUE;
             if (pressed) {
@@ -182,10 +193,10 @@ int main(int argc, char** argv) {
         f32 dt = cast(f32) (clock.Elapsed - lastTime);
 
         {
-            camera.Transform.Rotation[1] -= cast(f32) MouseXDelta * 150.0f * dt;
+            camera.Transform.Rotation[1] -= cast(f32) MouseXDelta * 0.5f;
             camera.Transform.Rotation[1] = fmod(camera.Transform.Rotation[1], 360.0f);
 
-            camera.Transform.Rotation[0] -= cast(f32) MouseYDelta * 150.0f * dt;
+            camera.Transform.Rotation[0] -= cast(f32) MouseYDelta * 0.5f;
 
             if (camera.Transform.Rotation[0] > 80.0f) {
                 camera.Transform.Rotation[0] = 80.0f;

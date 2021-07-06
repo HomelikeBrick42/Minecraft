@@ -42,6 +42,9 @@ typedef f64 GLclampd;
 #define GL_BACK 1029
 #define GL_FRONT_AND_BACK 1032
 
+#define GL_LINE 6913
+#define GL_FILL 6914
+
 #define GL_TRIANGLES 4
 
 #define GL_FRAGMENT_SHADER 35632
@@ -65,8 +68,11 @@ typedef f64 GLclampd;
     GL_FUNCTION(glClearColor, void, GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha) \
     \
     GL_FUNCTION(glEnable, void, GLenum cap) \
+    GL_FUNCTION(glDisable, void, GLenum cap) \
     GL_FUNCTION(glBlendFunc, void, GLenum sfactor, GLenum dfactor) \
     GL_FUNCTION(glCullFace, void, GLenum mode) \
+    \
+    GL_FUNCTION(glPolygonMode, void, GLenum face, GLenum mode) \
     \
     GL_FUNCTION(glDrawElements, void, GLenum mode, GLsizei count, GLenum type, const void* indices) \
     \
