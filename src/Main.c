@@ -10,6 +10,7 @@
 #include "Shader.h"
 #include "Camera.h"
 #include "Chunk.h"
+#include "stb_image.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -66,11 +67,11 @@ static void WindowKeyCallback(Window* window, u32 key, b8 pressed, void* userDat
         case 'R': {
             // NOTE: This requires a compatability context? Should this be used?
             if (pressed) {
-                glDisable(GL_CULL_FACE);
+                // glDisable(GL_CULL_FACE);
                 glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             } else {
-                glEnable(GL_CULL_FACE);
-                glCullFace(GL_BACK);
+                // glEnable(GL_CULL_FACE);
+                // glCullFace(GL_BACK);
                 glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             }
         } break;
@@ -193,6 +194,7 @@ int main(int argc, char** argv) {
         Clock_Update(&clock);
         f32 dt = cast(f32) (clock.Elapsed - lastTime);
 
+        // Camera movement
         {
             camera.Transform.Rotation[1] -= cast(f32) MouseXDelta * 0.5f;
             camera.Transform.Rotation[1] = fmod(camera.Transform.Rotation[1], 360.0f);
