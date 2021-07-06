@@ -22,6 +22,7 @@
         "stdio.h": "c",
         "stdlib.h": "c",
         "dynamicarray.h": "c",
-        "chunk.h": "c"
+        "chunk.h": "c",
+        "xiosbase": "c"
     }
 }

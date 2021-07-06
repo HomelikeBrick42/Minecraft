@@ -86,8 +86,8 @@ static void WindowKeyCallback(Window* window, u32 key, b8 pressed, void* userDat
 
 static s32 MouseXDelta = 0, MouseYDelta = 0;
 static void WindowMouseMoveCallback(Window* window, s32 deltaX, s32 deltaY, void* userData) {
-    MouseXDelta = deltaX;
-    MouseYDelta = deltaY;
+    MouseXDelta += deltaX;
+    MouseYDelta += deltaY;
 }
 
 int main(int argc, char** argv) {
@@ -164,8 +164,11 @@ int main(int argc, char** argv) {
 
     Window_SetResizeCallback(window, WindowResizeCallback, &camera);
 
-    Chunk chunk = {};
-    Chunk_Create(&chunk, (vec3){ 0.0f, 0.0f, 0.0f }, 64, 64, 64, shader);
+    Chunk chunks[4];
+    Chunk_Create(&chunks[0], (vec3){ 0.0f, 0.0f, 0.0f }, 64, 64, 64, shader);
+    Chunk_Create(&chunks[1], (vec3){ 0.0f, -64.0f, 0.0f }, 64, 64, 64, shader);
+    Chunk_Create(&chunks[2], (vec3){ 64.0f, 0.0f, 0.0f }, 64, 64, 64, shader);
+    Chunk_Create(&chunks[3], (vec3){ 0.0f, 64.0f, 0.0f }, 64, 64, 64, shader);
 
     Window_Show(window);
     Window_LockCursor(window);
@@ -246,7 +249,9 @@ int main(int argc, char** argv) {
         glClearColor(0.4f, 0.6f, 0.8f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-        Chunk_Draw(&chunk, &camera);
+        for (u64 i = 0; i < sizeof(chunks) / sizeof(chunks[0]); i++) {
+            Chunk_Draw(&chunks[i], &camera);
+        }
 
         Window_SwapBuffers(window);
 
@@ -262,7 +267,9 @@ int main(int argc, char** argv) {
 
     Window_Hide(window);
 
-    Chunk_Destroy(&chunk);
+    for (u64 i = 0; i < sizeof(chunks) / sizeof(chunks[0]); i++) {
+        Chunk_Destroy(&chunks[i]);
+    }
     glDeleteProgram(shader);
 
     Window_Destroy(window);

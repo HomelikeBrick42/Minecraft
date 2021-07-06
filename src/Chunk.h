@@ -29,3 +29,4 @@ void Chunk_Create(Chunk* chunk, vec3 center, u32 width, u32 height, u32 depth, G
 void Chunk_Destroy(Chunk* chunk);
 
 void Chunk_Draw(Chunk* chunk, Camera* camera);
+void Chunk_RecalculateMesh(Chunk* chunk);
