@@ -33,9 +33,14 @@ typedef f64 GLclampd;
 
 #define GL_DEPTH_TEST 2929
 #define GL_BLEND 3042
+#define GL_CULL_FACE 2884
 
 #define GL_SRC_ALPHA 770
 #define GL_ONE_MINUS_SRC_ALPHA 771
+
+#define GL_FRONT 1028
+#define GL_BACK 1029
+#define GL_FRONT_AND_BACK 1032
 
 #define GL_TRIANGLES 4
 
@@ -61,6 +66,7 @@ typedef f64 GLclampd;
     \
     GL_FUNCTION(glEnable, void, GLenum cap) \
     GL_FUNCTION(glBlendFunc, void, GLenum sfactor, GLenum dfactor) \
+    GL_FUNCTION(glCullFace, void, GLenum mode) \
     \
     GL_FUNCTION(glDrawElements, void, GLenum mode, GLsizei count, GLenum type, const void* indices) \
     \

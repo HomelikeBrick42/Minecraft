@@ -158,13 +158,13 @@ void Chunk_Create(Chunk* chunk, vec3 center, u32 width, u32 height, u32 depth, G
                         },
                     }));
 
-                    DynamicArrayPush(chunk->Indices, currentIndex + 0);
+                    DynamicArrayPush(chunk->Indices, currentIndex + 2);
                     DynamicArrayPush(chunk->Indices, currentIndex + 1);
-                    DynamicArrayPush(chunk->Indices, currentIndex + 2);
-
                     DynamicArrayPush(chunk->Indices, currentIndex + 0);
-                    DynamicArrayPush(chunk->Indices, currentIndex + 2);
+
                     DynamicArrayPush(chunk->Indices, currentIndex + 3);
+                    DynamicArrayPush(chunk->Indices, currentIndex + 2);
+                    DynamicArrayPush(chunk->Indices, currentIndex + 0);
 
                     currentIndex += 4;
                 }
@@ -220,13 +220,13 @@ void Chunk_Create(Chunk* chunk, vec3 center, u32 width, u32 height, u32 depth, G
                         },
                     }));
 
-                    DynamicArrayPush(chunk->Indices, currentIndex + 0);
+                    DynamicArrayPush(chunk->Indices, currentIndex + 2);
                     DynamicArrayPush(chunk->Indices, currentIndex + 1);
-                    DynamicArrayPush(chunk->Indices, currentIndex + 2);
-
                     DynamicArrayPush(chunk->Indices, currentIndex + 0);
-                    DynamicArrayPush(chunk->Indices, currentIndex + 2);
+
                     DynamicArrayPush(chunk->Indices, currentIndex + 3);
+                    DynamicArrayPush(chunk->Indices, currentIndex + 2);
+                    DynamicArrayPush(chunk->Indices, currentIndex + 0);
 
                     currentIndex += 4;
                 }
@@ -344,13 +344,13 @@ void Chunk_Create(Chunk* chunk, vec3 center, u32 width, u32 height, u32 depth, G
                         },
                     }));
 
-                    DynamicArrayPush(chunk->Indices, currentIndex + 0);
+                    DynamicArrayPush(chunk->Indices, currentIndex + 2);
                     DynamicArrayPush(chunk->Indices, currentIndex + 1);
-                    DynamicArrayPush(chunk->Indices, currentIndex + 2);
-
                     DynamicArrayPush(chunk->Indices, currentIndex + 0);
-                    DynamicArrayPush(chunk->Indices, currentIndex + 2);
+
                     DynamicArrayPush(chunk->Indices, currentIndex + 3);
+                    DynamicArrayPush(chunk->Indices, currentIndex + 2);
+                    DynamicArrayPush(chunk->Indices, currentIndex + 0);
 
                     currentIndex += 4;
                 }
