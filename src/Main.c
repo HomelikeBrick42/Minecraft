@@ -166,7 +166,7 @@ int main(int argc, char** argv) {
 
     Camera camera = {};
     camera.Transform = (Transform){
-        .Position = { 0.0f, 0.0f, 80.0f },
+        .Position = { 0.0f, 20.0f, 0.0f },
         .Rotation = { 0.0f, 0.0f, 0.0f },
         .Scale = { 1.0f, 1.0f, 1.0f },
     };
