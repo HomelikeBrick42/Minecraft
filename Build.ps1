@@ -10,7 +10,8 @@ $compilerFlags =
 	"-Werror",
 	"-Wno-unused-parameter",
     "-Wno-unused-variable",
-    ("-I" + [String]$pwd + "\lib\cglm\include")
+    ("-I" + [String]$pwd + "\lib\cglm\include"),
+    ("-I" + [String]$pwd + "\lib\")
 $compilerDefines =
 	"-D_CRT_SECURE_NO_WARNINGS",
 	"-D_DEBUG"

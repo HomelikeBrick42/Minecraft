@@ -4,7 +4,8 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/src/**",
-                "${workspaceFolder}/lib/cglm/include"
+                "${workspaceFolder}/lib/cglm/include",
+                "${workspaceFolder}/lib/"
             ],
             "defines": [
                 "_CRT_SECURE_NO_WARNINGS",
