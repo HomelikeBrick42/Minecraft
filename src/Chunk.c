@@ -31,14 +31,16 @@ void Chunk_Create(Chunk* chunk, vec3 center, u32 width, u32 height, u32 depth, G
 
                 const f32 Scale2D = 0.02f;
                 const f32 Scale3D = 0.1f;
-                if (position[1] > 0.0f) {
-                    const f32 frequency = 5.0f;
-                    f32 noise = (snoise2(x * Scale2D, z * Scale2D) + 1.0f) * 0.5f;
+                f32 groundHeight = snoise2(x * 0.002f, y * 0.002f) * 15.0f;
+
+                if (position[1] > groundHeight) {
+                    const f32 frequency = 10.0f;
+                    f32 noise = (snoise2(position[0] * Scale2D, position[2] * Scale2D) + 1.0f) * 0.5f;
                     noise *= frequency;
-                    noise -= snoise3(x * Scale3D, y * Scale3D, z * Scale3D) * 0.5f;
-                    DynamicArrayPush(chunk->Blocks, noise > position[1] ? BlockID_Stone : BlockID_Air);
+                    noise -= snoise3(position[0] * Scale3D, position[1] * Scale3D, position[2] * Scale3D);
+                    DynamicArrayPush(chunk->Blocks, noise > position[1] - groundHeight ? BlockID_Stone : BlockID_Air);
                 } else {
-                    f32 noise = snoise3(x * Scale3D, y * Scale3D, z * Scale3D);
+                    f32 noise = snoise3(position[0] * Scale3D, position[1] * Scale3D, position[2] * Scale3D);
                     DynamicArrayPush(chunk->Blocks, noise < 0.0f ? BlockID_Stone : BlockID_Air);
                 }
             }
