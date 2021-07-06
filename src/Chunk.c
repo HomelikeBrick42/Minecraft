@@ -20,11 +20,27 @@ void Chunk_Create(Chunk* chunk, vec3 center, u32 width, u32 height, u32 depth, G
     glGenVertexArrays(1, &chunk->VertexArray);
     glBindVertexArray(chunk->VertexArray);
 
-    const f32 Scale = 0.1f;
     for (u32 x = 0; x < width; x++) {
         for (u32 y = 0; y < height; y++) {
             for (u32 z = 0; z < depth; z++) {
-                DynamicArrayPush(chunk->Blocks, snoise3(x * Scale, y * Scale, z * Scale) < 0.0f ? BlockID_Stone : BlockID_Air);
+                vec3 position = {
+                    chunk->Center[0] + cast(f32) x - (cast(f32) width * 0.5f + 0.5f),
+                    chunk->Center[1] + cast(f32) y - (cast(f32) height * 0.5f + 0.5f),
+                    chunk->Center[2] + cast(f32) z - (cast(f32) depth * 0.5f + 0.5f),
+                };
+
+                const f32 Scale2D = 0.02f;
+                const f32 Scale3D = 0.1f;
+                if (position[1] > 0.0f) {
+                    const f32 frequency = 5.0f;
+                    f32 noise = (snoise2(x * Scale2D, z * Scale2D) + 1.0f) * 0.5f;
+                    noise *= frequency;
+                    noise -= snoise3(x * Scale3D, y * Scale3D, z * Scale3D) * 0.5f;
+                    DynamicArrayPush(chunk->Blocks, noise > position[1] ? BlockID_Stone : BlockID_Air);
+                } else {
+                    f32 noise = snoise3(x * Scale3D, y * Scale3D, z * Scale3D);
+                    DynamicArrayPush(chunk->Blocks, noise < 0.0f ? BlockID_Stone : BlockID_Air);
+                }
             }
         }
     }
