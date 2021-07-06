@@ -60,6 +60,7 @@ void Chunk_Create(Chunk* chunk, vec3 center, u32 width, u32 height, u32 depth, G
 }
 
 void Chunk_Destroy(Chunk* chunk) {
+    DynamicArrayDestroy(chunk->Blocks);
     DynamicArrayDestroy(chunk->Vertices);
     DynamicArrayDestroy(chunk->Indices);
     glDeleteBuffers(1, &chunk->VertexBuffer);
