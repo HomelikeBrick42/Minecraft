@@ -163,7 +163,7 @@ int main(int argc, char** argv) {
         "layout(location = 1) in vec2 v_TexCoord;\n"
         "\n"
         "void main() {\n"
-        "   vec3 color = vec3(0.8); // vec3(v_TexCoord, 0.0);\n"
+        "   vec3 color = vec3(v_TexCoord, 0.0);\n"
         "   o_Color = vec4(color * max(0.3, (dot(v_Normal, normalize(vec3(0.4, 1.0, -0.3))) + 1.0) * 0.5), 1.0f);\n"
         "}\n";
 

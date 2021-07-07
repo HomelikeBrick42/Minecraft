@@ -123,6 +123,10 @@ void Chunk_RecalculateMesh(Chunk* chunk) {
                             1.0f,
                             0.0f,
                         },
+                        .TexCoord = {
+                            0.0f,
+                            1.0f,
+                        },
                     }));
                     DynamicArrayPush(chunk->Vertices, ((Vertex){
                         .Position = {
@@ -135,6 +139,10 @@ void Chunk_RecalculateMesh(Chunk* chunk) {
                             1.0f,
                             0.0f,
                         },
+                        .TexCoord = {
+                            1.0f,
+                            1.0f,
+                        },
                     }));
                     DynamicArrayPush(chunk->Vertices, ((Vertex){
                         .Position = {
@@ -144,6 +152,10 @@ void Chunk_RecalculateMesh(Chunk* chunk) {
                         },
                         .Normal = {
                             0.0f,
+                            1.0f,
+                            0.0f,
+                        },
+                        .TexCoord = {
                             1.0f,
                             0.0f,
                         },
@@ -157,6 +169,10 @@ void Chunk_RecalculateMesh(Chunk* chunk) {
                         .Normal = {
                             0.0f,
                             1.0f,
+                            0.0f,
+                        },
+                        .TexCoord = {
+                            0.0f,
                             0.0f,
                         },
                     }));
@@ -185,6 +201,10 @@ void Chunk_RecalculateMesh(Chunk* chunk) {
                             -1.0f,
                              0.0f,
                         },
+                        .TexCoord = {
+                            1.0f,
+                            1.0f,
+                        },
                     }));
                     DynamicArrayPush(chunk->Vertices, ((Vertex){
                         .Position = {
@@ -197,6 +217,10 @@ void Chunk_RecalculateMesh(Chunk* chunk) {
                             -1.0f,
                              0.0f,
                         },
+                        .TexCoord = {
+                            0.0f,
+                            1.0f,
+                        },
                     }));
                     DynamicArrayPush(chunk->Vertices, ((Vertex){
                         .Position = {
@@ -209,6 +233,10 @@ void Chunk_RecalculateMesh(Chunk* chunk) {
                             -1.0f,
                              0.0f,
                         },
+                        .TexCoord = {
+                            0.0f,
+                            0.0f,
+                        },
                     }));
                     DynamicArrayPush(chunk->Vertices, ((Vertex){
                         .Position = {
@@ -220,6 +248,10 @@ void Chunk_RecalculateMesh(Chunk* chunk) {
                              0.0f,
                             -1.0f,
                              0.0f,
+                        },
+                        .TexCoord = {
+                            1.0f,
+                            0.0f,
                         },
                     }));
 
@@ -247,6 +279,10 @@ void Chunk_RecalculateMesh(Chunk* chunk) {
                              0.0f,
                              0.0f,
                         },
+                        .TexCoord = {
+                            1.0f,
+                            1.0f,
+                        },
                     }));
                     DynamicArrayPush(chunk->Vertices, ((Vertex){
                         .Position = {
@@ -259,6 +295,10 @@ void Chunk_RecalculateMesh(Chunk* chunk) {
                              0.0f,
                              0.0f,
                         },
+                        .TexCoord = {
+                            0.0f,
+                            1.0f,
+                        },
                     }));
                     DynamicArrayPush(chunk->Vertices, ((Vertex){
                         .Position = {
@@ -271,6 +311,10 @@ void Chunk_RecalculateMesh(Chunk* chunk) {
                              0.0f,
                              0.0f,
                         },
+                        .TexCoord = {
+                            0.0f,
+                            0.0f,
+                        },
                     }));
                     DynamicArrayPush(chunk->Vertices, ((Vertex){
                         .Position = {
@@ -282,6 +326,10 @@ void Chunk_RecalculateMesh(Chunk* chunk) {
                             -1.0f,
                              0.0f,
                              0.0f,
+                        },
+                        .TexCoord = {
+                            1.0f,
+                            0.0f,
                         },
                     }));
 
@@ -309,6 +357,10 @@ void Chunk_RecalculateMesh(Chunk* chunk) {
                              0.0f,
                              0.0f,
                         },
+                        .TexCoord = {
+                            0.0f,
+                            1.0f,
+                        },
                     }));
                     DynamicArrayPush(chunk->Vertices, ((Vertex){
                         .Position = {
@@ -321,6 +373,10 @@ void Chunk_RecalculateMesh(Chunk* chunk) {
                              0.0f,
                              0.0f,
                         },
+                        .TexCoord = {
+                            1.0f,
+                            1.0f,
+                        },
                     }));
                     DynamicArrayPush(chunk->Vertices, ((Vertex){
                         .Position = {
@@ -333,6 +389,10 @@ void Chunk_RecalculateMesh(Chunk* chunk) {
                              0.0f,
                              0.0f,
                         },
+                        .TexCoord = {
+                            1.0f,
+                            0.0f,
+                        },
                     }));
                     DynamicArrayPush(chunk->Vertices, ((Vertex){
                         .Position = {
@@ -344,6 +404,10 @@ void Chunk_RecalculateMesh(Chunk* chunk) {
                              1.0f,
                              0.0f,
                              0.0f,
+                        },
+                        .TexCoord = {
+                            0.0f,
+                            0.0f,
                         },
                     }));
 
@@ -371,6 +435,10 @@ void Chunk_RecalculateMesh(Chunk* chunk) {
                              0.0f,
                              1.0f,
                         },
+                        .TexCoord = {
+                            1.0f,
+                            1.0f,
+                        },
                     }));
                     DynamicArrayPush(chunk->Vertices, ((Vertex){
                         .Position = {
@@ -383,6 +451,10 @@ void Chunk_RecalculateMesh(Chunk* chunk) {
                              0.0f,
                              1.0f,
                         },
+                        .TexCoord = {
+                            0.0f,
+                            1.0f,
+                        },
                     }));
                     DynamicArrayPush(chunk->Vertices, ((Vertex){
                         .Position = {
@@ -395,6 +467,10 @@ void Chunk_RecalculateMesh(Chunk* chunk) {
                              0.0f,
                              1.0f,
                         },
+                        .TexCoord = {
+                            0.0f,
+                            0.0f,
+                        },
                     }));
                     DynamicArrayPush(chunk->Vertices, ((Vertex){
                         .Position = {
@@ -406,6 +482,10 @@ void Chunk_RecalculateMesh(Chunk* chunk) {
                              0.0f,
                              0.0f,
                              1.0f,
+                        },
+                        .TexCoord = {
+                            1.0f,
+                            0.0f,
                         },
                     }));
 
@@ -433,6 +513,10 @@ void Chunk_RecalculateMesh(Chunk* chunk) {
                              0.0f,
                             -1.0f,
                         },
+                        .TexCoord = {
+                            0.0f,
+                            1.0f,
+                        },
                     }));
                     DynamicArrayPush(chunk->Vertices, ((Vertex){
                         .Position = {
@@ -445,6 +529,10 @@ void Chunk_RecalculateMesh(Chunk* chunk) {
                              0.0f,
                             -1.0f,
                         },
+                        .TexCoord = {
+                            1.0f,
+                            1.0f,
+                        },
                     }));
                     DynamicArrayPush(chunk->Vertices, ((Vertex){
                         .Position = {
@@ -457,6 +545,10 @@ void Chunk_RecalculateMesh(Chunk* chunk) {
                              0.0f,
                             -1.0f,
                         },
+                        .TexCoord = {
+                            1.0f,
+                            0.0f,
+                        },
                     }));
                     DynamicArrayPush(chunk->Vertices, ((Vertex){
                         .Position = {
@@ -468,6 +560,10 @@ void Chunk_RecalculateMesh(Chunk* chunk) {
                              0.0f,
                              0.0f,
                             -1.0f,
+                        },
+                        .TexCoord = {
+                            0.0f,
+                            0.0f,
                         },
                     }));
 
