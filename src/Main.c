@@ -67,11 +67,11 @@ static void WindowKeyCallback(Window* window, u32 key, b8 pressed, void* userDat
         case 'R': {
             // NOTE: This requires a compatability context? Should this be used?
             if (pressed) {
-                // glDisable(GL_CULL_FACE);
+                glDisable(GL_CULL_FACE);
                 glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             } else {
-                // glEnable(GL_CULL_FACE);
-                // glCullFace(GL_FRONT);
+                glEnable(GL_CULL_FACE);
+                glCullFace(GL_FRONT);
                 glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             }
         } break;
