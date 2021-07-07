@@ -222,7 +222,11 @@ TEST_DECLARE(glmc_mat2_swap_col)
 TEST_DECLARE(glmc_mat2_swap_row)
 TEST_DECLARE(glmc_mat2_rmc)
 
-/* camera */
+/* camera (incl [LR]H cross [NZ]O) */
+TEST_DECLARE(perspective_lh_zo)
+TEST_DECLARE(perspective_rh_zo)
+TEST_DECLARE(perspective_lh_no)
+TEST_DECLARE(perspective_rh_no)
 TEST_DECLARE(camera_lookat)
 TEST_DECLARE(camera_decomp)
 
@@ -284,6 +288,7 @@ TEST_DECLARE(glm_quat_mat3)
 TEST_DECLARE(glm_quat_mat3t)
 TEST_DECLARE(glm_quat_lerp)
 TEST_DECLARE(glm_quat_lerpc)
+TEST_DECLARE(glm_quat_nlerp)
 TEST_DECLARE(glm_quat_slerp)
 TEST_DECLARE(glm_quat_look)
 TEST_DECLARE(glm_quat_for)
@@ -292,6 +297,7 @@ TEST_DECLARE(glm_quat_rotatev)
 TEST_DECLARE(glm_quat_rotate)
 TEST_DECLARE(glm_quat_rotate_at)
 TEST_DECLARE(glm_quat_rotate_atm)
+TEST_DECLARE(glm_quat_from_vecs)
 
 TEST_DECLARE(glmc_quat_identity)
 TEST_DECLARE(glmc_quat_identity_array)
@@ -320,6 +326,7 @@ TEST_DECLARE(glmc_quat_mat3)
 TEST_DECLARE(glmc_quat_mat3t)
 TEST_DECLARE(glmc_quat_lerp)
 TEST_DECLARE(glmc_quat_lerpc)
+TEST_DECLARE(glmc_quat_nlerp)
 TEST_DECLARE(glmc_quat_slerp)
 TEST_DECLARE(glmc_quat_look)
 TEST_DECLARE(glmc_quat_for)
@@ -328,6 +335,7 @@ TEST_DECLARE(glmc_quat_rotatev)
 TEST_DECLARE(glmc_quat_rotate)
 TEST_DECLARE(glmc_quat_rotate_at)
 TEST_DECLARE(glmc_quat_rotate_atm)
+TEST_DECLARE(glmc_quat_from_vecs)
 
 /* bezier */
 TEST_DECLARE(bezier)
@@ -944,7 +952,11 @@ TEST_LIST {
   TEST_ENTRY(glmc_mat2_swap_row)
   TEST_ENTRY(glmc_mat2_rmc)
 
-  /* camera */
+  /* camera (incl [LR]H cross [NZ]O) */
+  TEST_ENTRY(perspective_lh_zo)
+  TEST_ENTRY(perspective_rh_zo)
+  TEST_ENTRY(perspective_lh_no)
+  TEST_ENTRY(perspective_rh_no)
   TEST_ENTRY(camera_lookat)
   TEST_ENTRY(camera_decomp)
   
@@ -1006,6 +1018,7 @@ TEST_LIST {
   TEST_ENTRY(glm_quat_mat3t)
   TEST_ENTRY(glm_quat_lerp)
   TEST_ENTRY(glm_quat_lerpc)
+  TEST_ENTRY(glm_quat_nlerp)
   TEST_ENTRY(glm_quat_slerp)
   TEST_ENTRY(glm_quat_look)
   TEST_ENTRY(glm_quat_for)
@@ -1014,6 +1027,7 @@ TEST_LIST {
   TEST_ENTRY(glm_quat_rotate)
   TEST_ENTRY(glm_quat_rotate_at)
   TEST_ENTRY(glm_quat_rotate_atm)
+  TEST_ENTRY(glm_quat_from_vecs)
 
   TEST_ENTRY(glmc_quat_identity)
   TEST_ENTRY(glmc_quat_identity_array)
@@ -1042,6 +1056,7 @@ TEST_LIST {
   TEST_ENTRY(glmc_quat_mat3t)
   TEST_ENTRY(glmc_quat_lerp)
   TEST_ENTRY(glmc_quat_lerpc)
+  TEST_ENTRY(glmc_quat_nlerp)
   TEST_ENTRY(glmc_quat_slerp)
   TEST_ENTRY(glmc_quat_look)
   TEST_ENTRY(glmc_quat_for)
@@ -1050,6 +1065,7 @@ TEST_LIST {
   TEST_ENTRY(glmc_quat_rotate)
   TEST_ENTRY(glmc_quat_rotate_at)
   TEST_ENTRY(glmc_quat_rotate_atm)
+  TEST_ENTRY(glmc_quat_from_vecs)
 
   /* bezier */
   TEST_ENTRY(bezier)

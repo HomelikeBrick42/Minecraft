@@ -187,8 +187,29 @@ glm_mat4_identity_array(mat4 * __restrict mat, size_t count) {
 CGLM_INLINE
 void
 glm_mat4_zero(mat4 mat) {
+#ifdef __AVX__
+  __m256 y0;
+  y0 = _mm256_setzero_ps();
+  glmm_store256(mat[0], y0);
+  glmm_store256(mat[2], y0);
+#elif defined( __SSE__ ) || defined( __SSE2__ )
+  glmm_128 x0;
+  x0 = _mm_setzero_ps();
+  glmm_store(mat[0], x0);
+  glmm_store(mat[1], x0);
+  glmm_store(mat[2], x0);
+  glmm_store(mat[3], x0);
+#elif defined(CGLM_NEON_FP)
+  glmm_128 x0;
+  x0 = vdupq_n_f32(0.0f);
+  vst1q_f32(mat[0], x0);
+  vst1q_f32(mat[1], x0);
+  vst1q_f32(mat[2], x0);
+  vst1q_f32(mat[3], x0);
+#else
   CGLM_ALIGN_MAT mat4 t = GLM_MAT4_ZERO_INIT;
   glm_mat4_copy(t, mat);
+#endif
 }
 
 /*!
@@ -539,7 +560,9 @@ glm_mat4_scale_p(mat4 m, float s) {
 CGLM_INLINE
 void
 glm_mat4_scale(mat4 m, float s) {
-#if defined( __SSE__ ) || defined( __SSE2__ )
+#ifdef __AVX__
+  glm_mat4_scale_avx(m, s);
+#elif defined( __SSE__ ) || defined( __SSE2__ )
   glm_mat4_scale_sse2(m, s);
 #elif defined(CGLM_NEON_FP)
   glm_mat4_scale_neon(m, s);
@@ -560,6 +583,8 @@ float
 glm_mat4_det(mat4 mat) {
 #if defined( __SSE__ ) || defined( __SSE2__ )
   return glm_mat4_det_sse2(mat);
+#elif defined(CGLM_NEON_FP)
+  return glm_mat4_det_neon(mat);
 #else
   /* [square] det(A) = det(At) */
   float t[6];
@@ -593,6 +618,8 @@ void
 glm_mat4_inv(mat4 mat, mat4 dest) {
 #if defined( __SSE__ ) || defined( __SSE2__ )
   glm_mat4_inv_sse2(mat, dest);
+#elif defined(CGLM_NEON_FP)
+  glm_mat4_inv_neon(mat, dest);
 #else
   float t[6];
   float det;

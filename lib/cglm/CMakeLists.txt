@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8.2)
-project(cglm VERSION 0.8.0 LANGUAGES C)
+project(cglm VERSION 0.8.3 LANGUAGES C)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED YES)
@@ -18,7 +18,7 @@ else(CGLM_STATIC)
 endif()
 
 if(CGLM_USE_C99)
-  set(C_STANDARD 99)
+  set(CMAKE_C_STANDARD 99)
 endif()
 
 if(MSVC)
@@ -73,6 +73,18 @@ add_library(${PROJECT_NAME}
   src/bezier.c
   src/ray.c
   src/affine2d.c
+  src/clipspace/persp_lh_zo.c
+  src/clipspace/persp_rh_zo.c
+  src/clipspace/persp_lh_no.c
+  src/clipspace/persp_rh_no.c
+  src/clipspace/ortho_lh_zo.c
+  src/clipspace/ortho_rh_zo.c
+  src/clipspace/ortho_lh_no.c
+  src/clipspace/ortho_rh_no.c
+  src/clipspace/view_lh_zo.c
+  src/clipspace/view_rh_zo.c
+  src/clipspace/view_lh_no.c
+  src/clipspace/view_rh_no.c
   )
 
 if(CGLM_SHARED)
@@ -92,6 +104,11 @@ target_include_directories(${PROJECT_NAME}
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
+
+# Target for header-only usage
+add_library(${PROJECT_NAME}_headers INTERFACE)
+target_include_directories(${PROJECT_NAME}_headers INTERFACE
+  ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # Test Configuration
 if(CGLM_USE_TEST)
@@ -117,6 +134,16 @@ export(TARGETS ${PROJECT_NAME}
 )
 
 install(EXPORT      ${PROJECT_NAME}
+        FILE        "${PROJECT_NAME}Config.cmake"
         NAMESPACE   ${PROJECT_NAME}::
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME}/cmake)
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 
+set(PACKAGE_NAME ${PROJECT_NAME})
+set(prefix ${CMAKE_INSTALL_PREFIX})
+set(exec_prefix ${CMAKE_INSTALL_PREFIX})
+set(includedir "\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}")
+set(libdir "\${prefix}/${CMAKE_INSTALL_LIBDIR}")
+configure_file(${CMAKE_CURRENT_LIST_DIR}/cglm.pc.in ${CMAKE_BINARY_DIR}/cglm.pc @ONLY)
+
+install(FILES ${CMAKE_BINARY_DIR}/cglm.pc
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)

@@ -71,7 +71,7 @@ static void WindowKeyCallback(Window* window, u32 key, b8 pressed, void* userDat
                 glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             } else {
                 // glEnable(GL_CULL_FACE);
-                // glCullFace(GL_BACK);
+                // glCullFace(GL_FRONT);
                 glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             }
         } break;
@@ -132,7 +132,7 @@ int main(int argc, char** argv) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
+    glCullFace(GL_FRONT);
 
     static const char* VertexShaderSource =
         "#version 440 core\n"
@@ -202,10 +202,10 @@ int main(int argc, char** argv) {
 
         // Camera movement
         {
-            camera.Transform.Rotation[1] -= cast(f32) MouseXDelta * 0.5f;
+            camera.Transform.Rotation[1] += cast(f32) MouseXDelta * 0.5f;
             camera.Transform.Rotation[1] = fmodf(camera.Transform.Rotation[1], 360.0f);
 
-            camera.Transform.Rotation[0] -= cast(f32) MouseYDelta * 0.5f;
+            camera.Transform.Rotation[0] += cast(f32) MouseYDelta * 0.5f;
 
             if (camera.Transform.Rotation[0] > 80.0f) {
                 camera.Transform.Rotation[0] = 80.0f;
@@ -222,14 +222,14 @@ int main(int argc, char** argv) {
             glm_vec3_normalize(forward);
 
             vec3 right = {};
-            glm_vec3_cross(forward, (vec3){ 0.0f, 1.0f, 0.0f }, right);
+            glm_vec3_cross((vec3){ 0.0f, 1.0f, 0.0f }, forward, right);
             glm_vec3_normalize(right);
 
             vec3 up = {};
             glm_vec3_cross(right, forward, up);
             glm_vec3_normalize(up);
 
-            f32 MoveSpeed = -(4.0f * dt);
+            f32 MoveSpeed = 4.0f * dt;
             if (ShiftPressed) {
                 MoveSpeed *= 3.0f;
             }

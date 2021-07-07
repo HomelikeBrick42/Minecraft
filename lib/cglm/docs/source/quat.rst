@@ -32,6 +32,7 @@ Functions:
 #. :c:func:`glm_quat`
 #. :c:func:`glm_quatv`
 #. :c:func:`glm_quat_copy`
+#. :c:func:`glm_quat_from_vecs`
 #. :c:func:`glm_quat_norm`
 #. :c:func:`glm_quat_normalize`
 #. :c:func:`glm_quat_normalize_to`
@@ -52,6 +53,7 @@ Functions:
 #. :c:func:`glm_quat_mat3`
 #. :c:func:`glm_quat_mat3t`
 #. :c:func:`glm_quat_lerp`
+#. :c:func:`glm_quat_nlerp`
 #. :c:func:`glm_quat_slerp`
 #. :c:func:`glm_quat_look`
 #. :c:func:`glm_quat_for`
@@ -121,6 +123,20 @@ Functions documentation
     Parameters:
       | *[in]*  **q**     source quaternion
       | *[out]* **dest**  destination quaternion
+
+.. c:function:: void  glm_quat_from_vecs(vec3 a, vec3 b, versor dest)
+
+    | compute unit quaternion needed to rotate a into b
+
+    References:
+      * `Finding quaternion representing the rotation from one vector to another <https://stackoverflow.com/a/11741520/183120>`_
+      * `Quaternion from two vectors <http://lolengine.net/blog/2014/02/24/quaternion-from-two-vectors-final>`_
+      * `Angle between vectors <http://www.euclideanspace.com/maths/algebra/vectors/angleBetween/minorlogic.htm>`_
+
+    Parameters:
+      | *[in]*  **a**     unit vector
+      | *[in]*  **b**     unit vector
+      | *[in]*  **dest**  unit quaternion
 
 .. c:function:: float  glm_quat_norm(versor q)
 
@@ -297,6 +313,25 @@ Functions documentation
 
     | interpolates between two quaternions
     | using spherical linear interpolation (LERP)
+
+    Parameters:
+      | *[in]*  **from**  from
+      | *[in]*  **to**    to
+      | *[in]*  **t**     interpolant (amount) clamped between 0 and 1
+      | *[out]* **dest**  result quaternion
+
+.. c:function:: void glm_quat_nlerp(versor q, versor r, float  t, versor dest)
+
+    | interpolates between two quaternions
+    | taking the shortest rotation path using
+    | normalized linear interpolation (NLERP)
+
+    | This is a cheaper alternative to slerp; most games use nlerp
+    | for animations as it visually makes little difference.
+
+    References:
+      * `Understanding Slerp, Then Not Using it <http://number-none.com/product/Understanding%20Slerp,%20Then%20Not%20Using%20It>`_
+      * `Lerp, Slerp and Nlerp <https://keithmaggio.wordpress.com/2011/02/15/math-magician-lerp-slerp-and-nlerp/>`_
 
     Parameters:
       | *[in]*  **from**  from
