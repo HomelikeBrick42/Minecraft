@@ -106,7 +106,7 @@ static void WindowMouseMoveCallback(Window* window, s32 deltaX, s32 deltaY, void
 int main(int argc, char** argv) {
     Clock_Init();
 
-    Window* window = Window_Create(1280, 720, "Window");
+    Window* window = Window_Create(1280, 720, "Minecraft");
     if (!window) {
         printf("Unable to create window!\n");
         return -1;
@@ -139,8 +139,10 @@ int main(int argc, char** argv) {
         "\n"
         "layout(location = 0) in vec4 a_Position;\n"
         "layout(location = 1) in vec3 a_Normal;\n"
+        "layout(location = 2) in vec2 a_TexCoord;\n"
         "\n"
         "layout(location = 0) out vec3 v_Normal;\n"
+        "layout(location = 1) out vec2 v_TexCoord;\n"
         "\n"
         "layout(location = 0) uniform mat4 u_Model;\n"
         "layout(location = 1) uniform mat4 u_View;\n"
@@ -148,6 +150,7 @@ int main(int argc, char** argv) {
         "\n"
         "void main() {\n"
         "   v_Normal = (u_Model * vec4(a_Normal, 0.0)).xyz;\n"
+        "   v_TexCoord = a_TexCoord;\n"
         "   gl_Position = u_Projection * u_View * u_Model * a_Position;\n"
         "}\n";
 
@@ -157,9 +160,11 @@ int main(int argc, char** argv) {
         "layout(location = 0) out vec4 o_Color;\n"
         "\n"
         "layout(location = 0) in vec3 v_Normal;\n"
+        "layout(location = 1) in vec2 v_TexCoord;\n"
         "\n"
         "void main() {\n"
-        "   o_Color = vec4(vec3(0.8, 0.8, 0.8) * max(0.3, (dot(v_Normal, normalize(vec3(0.4, 1.0, -0.3))) + 1.0) * 0.5), 1.0f);\n"
+        "   vec3 color = vec3(v_TexCoord, 0.0);\n"
+        "   o_Color = vec4(color * max(0.3, (dot(v_Normal, normalize(vec3(0.4, 1.0, -0.3))) + 1.0) * 0.5), 1.0f);\n"
         "}\n";
 
     GLuint shader = 0;
