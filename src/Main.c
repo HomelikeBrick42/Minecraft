@@ -226,7 +226,7 @@ int main(int argc, char** argv) {
             glm_vec3_normalize(right);
 
             vec3 up = {};
-            glm_vec3_cross(right, forward, up);
+            glm_vec3_cross(forward, right, up);
             glm_vec3_normalize(up);
 
             f32 MoveSpeed = 4.0f * dt;
@@ -257,12 +257,12 @@ int main(int argc, char** argv) {
             if (EPressed) {
                 vec3 move = {};
                 glm_vec3_mul(up, (vec3){ MoveSpeed, MoveSpeed, MoveSpeed }, move);
-                glm_vec3_sub(camera.Transform.Position, move, camera.Transform.Position);
+                glm_vec3_add(camera.Transform.Position, move, camera.Transform.Position);
             }
             if (QPressed) {
                 vec3 move = {};
                 glm_vec3_mul(up, (vec3){ MoveSpeed, MoveSpeed, MoveSpeed }, move);
-                glm_vec3_add(camera.Transform.Position, move, camera.Transform.Position);
+                glm_vec3_sub(camera.Transform.Position, move, camera.Transform.Position);
             }
         }
 
