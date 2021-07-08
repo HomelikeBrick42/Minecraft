@@ -296,6 +296,21 @@ int main(int argc, char** argv) {
         }
         End:
 
+        for (u64 i = 0; i < DynamicArrayLength(chunks); i++) {
+            if (_abs64(chunks[i].Position.x - cast(s64) ((roundf(camera.Transform.Position[0] / chunkSize) * chunkSize))) > chunkRenderDistance * cast(s64) chunkSize ||
+                _abs64(chunks[i].Position.y - cast(s64) ((roundf(camera.Transform.Position[1] / chunkSize) * chunkSize))) > chunkRenderDistance * cast(s64) chunkSize ||
+                _abs64(chunks[i].Position.z - cast(s64) ((roundf(camera.Transform.Position[2] / chunkSize) * chunkSize))) > chunkRenderDistance * cast(s64) chunkSize) {
+                Chunk_Destroy(&chunks[i]);
+                DynamicArrayPopAt(chunks, i, NULL);
+                chunksModified++;
+                i--;
+            }
+
+            if (chunksModified > maxModifiedChunksPerFrame) {
+                break;
+            }
+        }
+
         glClearColor(0.4f, 0.6f, 0.8f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
