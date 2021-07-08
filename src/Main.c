@@ -38,6 +38,7 @@ static b8 DPressed = FALSE;
 static b8 QPressed = FALSE;
 static b8 EPressed = FALSE;
 static b8 ShiftPressed = FALSE;
+static b8 ChunkLoadingDisabled = FALSE;
 static void WindowKeyCallback(Window* window, u32 key, b8 pressed, void* userData) {
     switch (key) {
         case 'W': {
@@ -73,6 +74,12 @@ static void WindowKeyCallback(Window* window, u32 key, b8 pressed, void* userDat
                 glEnable(GL_CULL_FACE);
                 glCullFace(GL_FRONT);
                 glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            }
+        } break;
+
+        case 'F': {
+            if (pressed) {
+                ChunkLoadingDisabled = !ChunkLoadingDisabled;
             }
         } break;
 
@@ -262,52 +269,54 @@ int main(int argc, char** argv) {
             }
         }
 
-        const u64 chunkSize = 8;
-        const s64 chunkRenderDistance = 5;
-        const u64 maxModifiedChunksPerFrame = 5;
-        u64 chunksModified = 0;
-        for (s64 x = -chunkRenderDistance; x <= chunkRenderDistance; x++) {
-            for (s64 y = -chunkRenderDistance; y <= chunkRenderDistance; y++) {
-                for (s64 z = -chunkRenderDistance; z <= chunkRenderDistance; z++) {
-                    s64 posX = x * chunkSize + cast(s64) ((roundf(camera.Transform.Position[0] / chunkSize) * chunkSize));
-                    s64 posY = y * chunkSize + cast(s64) ((roundf(camera.Transform.Position[1] / chunkSize) * chunkSize));
-                    s64 posZ = z * chunkSize + cast(s64) ((roundf(camera.Transform.Position[2] / chunkSize) * chunkSize));
+        if (!ChunkLoadingDisabled) {
+            const u64 chunkSize = 8;
+            const s64 chunkRenderDistance = 5;
+            const u64 maxModifiedChunksPerFrame = 5;
+            u64 chunksModified = 0;
+            for (s64 x = -chunkRenderDistance; x <= chunkRenderDistance; x++) {
+                for (s64 y = -chunkRenderDistance; y <= chunkRenderDistance; y++) {
+                    for (s64 z = -chunkRenderDistance; z <= chunkRenderDistance; z++) {
+                        s64 posX = x * chunkSize + cast(s64) ((roundf(camera.Transform.Position[0] / chunkSize) * chunkSize));
+                        s64 posY = y * chunkSize + cast(s64) ((roundf(camera.Transform.Position[1] / chunkSize) * chunkSize));
+                        s64 posZ = z * chunkSize + cast(s64) ((roundf(camera.Transform.Position[2] / chunkSize) * chunkSize));
 
-                    b8 exists = FALSE;
-                    for (u64 i = 0; i < DynamicArrayLength(chunks); i++) {
-                        if (posX == chunks[i].Position.x && posY == chunks[i].Position.y && posZ == chunks[i].Position.z) {
-                            exists = TRUE;
-                            break;
+                        b8 exists = FALSE;
+                        for (u64 i = 0; i < DynamicArrayLength(chunks); i++) {
+                            if (posX == chunks[i].Position.x && posY == chunks[i].Position.y && posZ == chunks[i].Position.z) {
+                                exists = TRUE;
+                                break;
+                            }
                         }
-                    }
-                    if (exists) {
-                        continue;
-                    }
+                        if (exists) {
+                            continue;
+                        }
 
-                    Chunk chunk;
-                    Chunk_Create(&chunk, posX, posY, posZ, chunkSize, chunkSize, chunkSize, shader);
-                    DynamicArrayPush(chunks, chunk);
-                    chunksModified++;
-                    if (chunksModified > maxModifiedChunksPerFrame) {
-                        goto End;
+                        Chunk chunk;
+                        Chunk_Create(&chunk, posX, posY, posZ, chunkSize, chunkSize, chunkSize, shader);
+                        DynamicArrayPush(chunks, chunk);
+                        chunksModified++;
+                        if (chunksModified > maxModifiedChunksPerFrame) {
+                            goto End;
+                        }
                     }
                 }
             }
-        }
-        End:
+            End:
 
-        for (u64 i = 0; i < DynamicArrayLength(chunks); i++) {
-            if (_abs64(chunks[i].Position.x - cast(s64) ((roundf(camera.Transform.Position[0] / chunkSize) * chunkSize))) > chunkRenderDistance * cast(s64) chunkSize ||
-                _abs64(chunks[i].Position.y - cast(s64) ((roundf(camera.Transform.Position[1] / chunkSize) * chunkSize))) > chunkRenderDistance * cast(s64) chunkSize ||
-                _abs64(chunks[i].Position.z - cast(s64) ((roundf(camera.Transform.Position[2] / chunkSize) * chunkSize))) > chunkRenderDistance * cast(s64) chunkSize) {
-                Chunk_Destroy(&chunks[i]);
-                DynamicArrayPopAt(chunks, i, NULL);
-                chunksModified++;
-                i--;
-            }
+            for (u64 i = 0; i < DynamicArrayLength(chunks); i++) {
+                if (_abs64(chunks[i].Position.x - cast(s64) ((roundf(camera.Transform.Position[0] / chunkSize) * chunkSize))) > chunkRenderDistance * cast(s64) chunkSize ||
+                    _abs64(chunks[i].Position.y - cast(s64) ((roundf(camera.Transform.Position[1] / chunkSize) * chunkSize))) > chunkRenderDistance * cast(s64) chunkSize ||
+                    _abs64(chunks[i].Position.z - cast(s64) ((roundf(camera.Transform.Position[2] / chunkSize) * chunkSize))) > chunkRenderDistance * cast(s64) chunkSize) {
+                    Chunk_Destroy(&chunks[i]);
+                    DynamicArrayPopAt(chunks, i, NULL);
+                    chunksModified++;
+                    i--; // TODO: Is this safe?
+                }
 
-            if (chunksModified > maxModifiedChunksPerFrame) {
-                break;
+                if (chunksModified > maxModifiedChunksPerFrame) {
+                    break;
+                }
             }
         }
 
