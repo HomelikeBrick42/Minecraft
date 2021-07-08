@@ -201,7 +201,7 @@ int main(int argc, char** argv) {
     while (TRUE) {
         Clock_Update(&clock);
         f32 dt = cast(f32) (clock.Elapsed - lastTime);
-        printf("FPS: %f, Chunk Count: %llu\r", 1.0f / dt, DynamicArrayLength(chunks));
+        printf("FPS: %f, Chunk Count: %llu                                                                \r", 1.0f / dt, DynamicArrayLength(chunks));
 
         // Camera movement
         {
@@ -234,7 +234,7 @@ int main(int argc, char** argv) {
 
             f32 MoveSpeed = 4.0f * dt;
             if (ShiftPressed) {
-                MoveSpeed *= 3.0f;
+                MoveSpeed *= 10.0f;
             }
 
             if (WPressed) {
@@ -272,8 +272,8 @@ int main(int argc, char** argv) {
         if (!ChunkLoadingDisabled) {
             const u64 chunkSize = 8;
             const s64 chunkRenderDistance = 5;
-            const u64 maxModifiedChunksPerFrame = 5;
-            u64 chunksModified = 0;
+            const u64 maxCreatedChunksPerFrame = 5;
+            u64 chunksCreated = 0;
             for (s64 x = -chunkRenderDistance; x <= chunkRenderDistance; x++) {
                 for (s64 y = -chunkRenderDistance; y <= chunkRenderDistance; y++) {
                     for (s64 z = -chunkRenderDistance; z <= chunkRenderDistance; z++) {
@@ -295,8 +295,8 @@ int main(int argc, char** argv) {
                         Chunk chunk;
                         Chunk_Create(&chunk, posX, posY, posZ, chunkSize, chunkSize, chunkSize, shader);
                         DynamicArrayPush(chunks, chunk);
-                        chunksModified++;
-                        if (chunksModified > maxModifiedChunksPerFrame) {
+                        chunksCreated++;
+                        if (chunksCreated > maxCreatedChunksPerFrame) {
                             goto End;
                         }
                     }
@@ -304,17 +304,19 @@ int main(int argc, char** argv) {
             }
             End:
 
+            const u64 maxChunksDestroyedPerFrame = 10;
+            u64 chunksDestroyed = 0;
             for (u64 i = 0; i < DynamicArrayLength(chunks); i++) {
                 if (_abs64(chunks[i].Position.x - cast(s64) ((roundf(camera.Transform.Position[0] / chunkSize) * chunkSize))) > chunkRenderDistance * cast(s64) chunkSize ||
                     _abs64(chunks[i].Position.y - cast(s64) ((roundf(camera.Transform.Position[1] / chunkSize) * chunkSize))) > chunkRenderDistance * cast(s64) chunkSize ||
                     _abs64(chunks[i].Position.z - cast(s64) ((roundf(camera.Transform.Position[2] / chunkSize) * chunkSize))) > chunkRenderDistance * cast(s64) chunkSize) {
                     Chunk_Destroy(&chunks[i]);
                     DynamicArrayPopAt(chunks, i, NULL);
-                    chunksModified++;
+                    chunksDestroyed++;
                     i--; // TODO: Is this safe?
                 }
 
-                if (chunksModified > maxModifiedChunksPerFrame) {
+                if (chunksDestroyed > maxChunksDestroyedPerFrame) {
                     break;
                 }
             }
