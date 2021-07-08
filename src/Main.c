@@ -175,7 +175,82 @@ int main(int argc, char** argv) {
         "}\n";
 
     GLuint shader = 0;
-    CreateShader(VertexShaderSource, FragmentShaderSource, &shader);
+    if (!CreateShader(VertexShaderSource, FragmentShaderSource, &shader)) {
+        printf("Unable to create shader!\n");
+        return -1;
+    }
+
+    static const char* TextVertexShaderSource =
+        "#version 440 core\n"
+        "\n"
+        "layout(location = 0) in vec3 a_Position;\n"
+        "layout(location = 1) in vec2 a_TexCoord;\n"
+        "\n"
+        "layout(location = 0) out vec2 v_TexCoord;\n"
+        "\n"
+        "void main() {\n"
+        "   v_TexCoord = a_TexCoord;\n"
+        "   gl_Position = vec4(a_Position, 1.0);\n"
+        "}\n";
+
+    static const char* TextFragmentShaderSource =
+        "#version 440 core\n"
+        "\n"
+        "layout(location = 0) out vec4 o_Color;\n"
+        "\n"
+        "layout(location = 0) in vec2 v_TexCoord;\n"
+        "\n"
+        "void main() {\n"
+        "   o_Color = vec4(v_TexCoord, 0.0, 1.0);\n"
+        "}\n";
+
+    GLuint textShader = 0;
+    if (!CreateShader(TextVertexShaderSource, TextFragmentShaderSource, &textShader)) {
+        printf("Unable to create text shader!\n");
+        return -1;
+    }
+
+    // TODO: Move this
+
+    #define PSF1_MAGIC0     0x36
+    #define PSF1_MAGIC1     0x04
+
+    #define PSF1_MODE512    0x01
+    #define PSF1_MODEHASTAB 0x02
+    #define PSF1_MODEHASSEQ 0x04
+    #define PSF1_MAXMODE    0x05
+
+    #define PSF1_SEPARATOR  0xFFFF
+    #define PSF1_STARTSEQ   0xFFFE
+
+    typedef struct PSF1_Header {
+        unsigned char magic[2];     /* Magic number */
+        unsigned char mode;         /* PSF font mode */
+        unsigned char charsize;     /* Character size */
+    } PSF1_Header;
+
+    FILE* fontFile = fopen("font.psf", "rb");
+    ASSERT(fontFile);
+    PSF1_Header header;
+    ASSERT(fread(&header, 1, sizeof(PSF1_Header), fontFile) == sizeof(PSF1_Header));
+    ASSERT(header.magic[0] == PSF1_MAGIC0);
+    ASSERT(header.magic[1] == PSF1_MAGIC1);
+    ASSERT((header.mode & PSF1_MODE512) == 0);
+    u8* font = malloc(header.charsize * 256);
+    ASSERT(fread(font, 1, header.charsize * 256, fontFile) == header.charsize * 256);
+
+    for (u64 y = 0; y < header.charsize; y++) {
+        u8 row = font['H' * header.charsize + y];
+        for (u64 x = 0; x < 8; x++) {
+            if (row & 0x80) {
+                printf("##");
+            } else {
+                printf("  ");
+            }
+            row <<= 1;
+        }
+        printf("\n");
+    }
 
     Camera camera = {};
     camera.Transform = (Transform){
