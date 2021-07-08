@@ -182,11 +182,7 @@ int main(int argc, char** argv) {
 
     Window_SetResizeCallback(window, WindowResizeCallback, &camera);
 
-    Chunk chunks[4];
-    Chunk_Create(&chunks[0], (vec3){ 0.0f, 0.0f, 0.0f }, 64, 64, 64, shader);
-    Chunk_Create(&chunks[1], (vec3){ 0.0f, -64.0f, 0.0f }, 64, 64, 64, shader);
-    Chunk_Create(&chunks[2], (vec3){ 64.0f, 0.0f, 0.0f }, 64, 64, 64, shader);
-    Chunk_Create(&chunks[3], (vec3){ 0.0f, 64.0f, 0.0f }, 64, 64, 64, shader);
+    Chunk* chunks = DynamicArrayCreate(Chunk);
 
     Window_Show(window);
     Window_LockCursor(window);
@@ -266,10 +262,43 @@ int main(int argc, char** argv) {
             }
         }
 
+        const u64 chunkSize = 8;
+        const s64 chunkRenderDistance = 5;
+        for (s64 x = -chunkRenderDistance; x <= chunkRenderDistance; x++) {
+            for (s64 y = -chunkRenderDistance; y <= chunkRenderDistance; y++) {
+                for (s64 z = -chunkRenderDistance; z <= chunkRenderDistance; z++) {
+                    vec3 position = {
+                        cast(f32) x * cast(f32) chunkSize + roundf(camera.Transform.Position[0] / cast(f32) chunkSize) * cast(f32) chunkSize,
+                        cast(f32) y * cast(f32) chunkSize + roundf(camera.Transform.Position[1] / cast(f32) chunkSize) * cast(f32) chunkSize,
+                        cast(f32) z * cast(f32) chunkSize + roundf(camera.Transform.Position[2] / cast(f32) chunkSize) * cast(f32) chunkSize,
+                    };
+
+                    b8 exists = FALSE;
+                    for (u64 i = 0; i < DynamicArrayLength(chunks); i++) {
+                        if (fabsf(position[0] - chunks[i].Center[0]) <= cast(f32) chunkSize * 0.5f &&
+                            fabsf(position[1] - chunks[i].Center[1]) <= cast(f32) chunkSize * 0.5f &&
+                            fabsf(position[2] - chunks[i].Center[2]) <= cast(f32) chunkSize * 0.5f) {
+                            exists = TRUE;
+                            break;
+                        }
+                    }
+                    if (exists) {
+                        continue;
+                    }
+
+                    Chunk chunk;
+                    Chunk_Create(&chunk, position, chunkSize, chunkSize, chunkSize, shader);
+                    DynamicArrayPush(chunks, chunk);
+                    goto End;
+                }
+            }
+        }
+        End:
+
         glClearColor(0.4f, 0.6f, 0.8f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-        for (u64 i = 0; i < sizeof(chunks) / sizeof(chunks[0]); i++) {
+        for (u64 i = 0; i < DynamicArrayLength(chunks); i++) {
             Chunk_Draw(&chunks[i], &camera);
         }
 
@@ -287,7 +316,7 @@ int main(int argc, char** argv) {
 
     Window_Hide(window);
 
-    for (u64 i = 0; i < sizeof(chunks) / sizeof(chunks[0]); i++) {
+    for (u64 i = 0; i < DynamicArrayLength(chunks); i++) {
         Chunk_Destroy(&chunks[i]);
     }
     glDeleteProgram(shader);
