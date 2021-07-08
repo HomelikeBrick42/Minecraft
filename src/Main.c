@@ -274,30 +274,32 @@ int main(int argc, char** argv) {
             const s64 chunkRenderDistance = 5;
             const u64 maxCreatedChunksPerFrame = 5;
             u64 chunksCreated = 0;
-            for (s64 x = -chunkRenderDistance; x <= chunkRenderDistance; x++) {
-                for (s64 y = -chunkRenderDistance; y <= chunkRenderDistance; y++) {
-                    for (s64 z = -chunkRenderDistance; z <= chunkRenderDistance; z++) {
-                        s64 posX = x * chunkSize + cast(s64) ((roundf(camera.Transform.Position[0] / chunkSize) * chunkSize));
-                        s64 posY = y * chunkSize + cast(s64) ((roundf(camera.Transform.Position[1] / chunkSize) * chunkSize));
-                        s64 posZ = z * chunkSize + cast(s64) ((roundf(camera.Transform.Position[2] / chunkSize) * chunkSize));
+            for (s64 i = 0; i <= chunkRenderDistance; i++) {
+                for (s64 x = -i; x <= i; x++) {
+                    for (s64 y = -i; y <= i; y++) {
+                        for (s64 z = -i; z <= i; z++) {
+                            s64 posX = x * chunkSize + cast(s64) ((roundf(camera.Transform.Position[0] / chunkSize) * chunkSize));
+                            s64 posY = y * chunkSize + cast(s64) ((roundf(camera.Transform.Position[1] / chunkSize) * chunkSize));
+                            s64 posZ = z * chunkSize + cast(s64) ((roundf(camera.Transform.Position[2] / chunkSize) * chunkSize));
 
-                        b8 exists = FALSE;
-                        for (u64 i = 0; i < DynamicArrayLength(chunks); i++) {
-                            if (posX == chunks[i].Position.x && posY == chunks[i].Position.y && posZ == chunks[i].Position.z) {
-                                exists = TRUE;
-                                break;
+                            b8 exists = FALSE;
+                            for (u64 i = 0; i < DynamicArrayLength(chunks); i++) {
+                                if (posX == chunks[i].Position.x && posY == chunks[i].Position.y && posZ == chunks[i].Position.z) {
+                                    exists = TRUE;
+                                    break;
+                                }
                             }
-                        }
-                        if (exists) {
-                            continue;
-                        }
+                            if (exists) {
+                                continue;
+                            }
 
-                        Chunk chunk;
-                        Chunk_Create(&chunk, posX, posY, posZ, chunkSize, chunkSize, chunkSize, shader);
-                        DynamicArrayPush(chunks, chunk);
-                        chunksCreated++;
-                        if (chunksCreated > maxCreatedChunksPerFrame) {
-                            goto End;
+                            Chunk chunk;
+                            Chunk_Create(&chunk, posX, posY, posZ, chunkSize, chunkSize, chunkSize, shader);
+                            DynamicArrayPush(chunks, chunk);
+                            chunksCreated++;
+                            if (chunksCreated > maxCreatedChunksPerFrame) {
+                                goto End;
+                            }
                         }
                     }
                 }
