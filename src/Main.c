@@ -210,12 +210,12 @@ int main(int argc, char** argv) {
 
             camera.Transform.Rotation[0] += cast(f32) MouseYDelta * 0.5f;
 
-            if (camera.Transform.Rotation[0] > 80.0f) {
-                camera.Transform.Rotation[0] = 80.0f;
+            if (camera.Transform.Rotation[0] > 89.999f) {
+                camera.Transform.Rotation[0] = 89.999f;
             }
 
-            if (camera.Transform.Rotation[0] < -80.0f) {
-                camera.Transform.Rotation[0] = -80.0f;
+            if (camera.Transform.Rotation[0] < -89.999f) {
+                camera.Transform.Rotation[0] = -89.999f;
             }
 
             vec3 forward = {};
