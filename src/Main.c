@@ -194,7 +194,7 @@ int main(int argc, char** argv) {
     while (TRUE) {
         Clock_Update(&clock);
         f32 dt = cast(f32) (clock.Elapsed - lastTime);
-        printf("FPS: %f\r", 1.0f / dt);
+        printf("FPS: %f, Chunk Count: %llu\r", 1.0f / dt, DynamicArrayLength(chunks));
 
         // Camera movement
         {
@@ -264,20 +264,18 @@ int main(int argc, char** argv) {
 
         const u64 chunkSize = 8;
         const s64 chunkRenderDistance = 5;
+        const u64 maxModifiedChunksPerFrame = 5;
+        u64 chunksModified = 0;
         for (s64 x = -chunkRenderDistance; x <= chunkRenderDistance; x++) {
             for (s64 y = -chunkRenderDistance; y <= chunkRenderDistance; y++) {
                 for (s64 z = -chunkRenderDistance; z <= chunkRenderDistance; z++) {
-                    vec3 position = {
-                        cast(f32) x * cast(f32) chunkSize + roundf(camera.Transform.Position[0] / cast(f32) chunkSize) * cast(f32) chunkSize,
-                        cast(f32) y * cast(f32) chunkSize + roundf(camera.Transform.Position[1] / cast(f32) chunkSize) * cast(f32) chunkSize,
-                        cast(f32) z * cast(f32) chunkSize + roundf(camera.Transform.Position[2] / cast(f32) chunkSize) * cast(f32) chunkSize,
-                    };
+                    s64 posX = x * chunkSize + cast(s64) ((roundf(camera.Transform.Position[0] / chunkSize) * chunkSize));
+                    s64 posY = y * chunkSize + cast(s64) ((roundf(camera.Transform.Position[1] / chunkSize) * chunkSize));
+                    s64 posZ = z * chunkSize + cast(s64) ((roundf(camera.Transform.Position[2] / chunkSize) * chunkSize));
 
                     b8 exists = FALSE;
                     for (u64 i = 0; i < DynamicArrayLength(chunks); i++) {
-                        if (fabsf(position[0] - chunks[i].Center[0]) <= cast(f32) chunkSize * 0.5f &&
-                            fabsf(position[1] - chunks[i].Center[1]) <= cast(f32) chunkSize * 0.5f &&
-                            fabsf(position[2] - chunks[i].Center[2]) <= cast(f32) chunkSize * 0.5f) {
+                        if (posX == chunks[i].Position.x && posY == chunks[i].Position.y && posZ == chunks[i].Position.z) {
                             exists = TRUE;
                             break;
                         }
@@ -287,9 +285,12 @@ int main(int argc, char** argv) {
                     }
 
                     Chunk chunk;
-                    Chunk_Create(&chunk, position, chunkSize, chunkSize, chunkSize, shader);
+                    Chunk_Create(&chunk, posX, posY, posZ, chunkSize, chunkSize, chunkSize, shader);
                     DynamicArrayPush(chunks, chunk);
-                    goto End;
+                    chunksModified++;
+                    if (chunksModified > maxModifiedChunksPerFrame) {
+                        goto End;
+                    }
                 }
             }
         }

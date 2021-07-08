@@ -22,9 +22,9 @@ static u16 GetBlock(vec3 position) {
     }
 }
 
-void Chunk_Create(Chunk* chunk, vec3 center, u32 width, u32 height, u32 depth, GLuint shader) {
+void Chunk_Create(Chunk* chunk, s64 x, s64 y, s64 z, u32 width, u32 height, u32 depth, GLuint shader) {
     *chunk = (Chunk){
-        .Center = { center[0], center[1], center[2] },
+        .Position = { x, y, z },
         .Width = width,
         .Height = height,
         .Depth = depth,
@@ -42,9 +42,9 @@ void Chunk_Create(Chunk* chunk, vec3 center, u32 width, u32 height, u32 depth, G
             for (u32 z = 0; z < depth; z++) {
                 u32 index = x + (y * width) + (z * width * height);
                 vec3 position = {
-                    chunk->Center[0] + cast(f32) x - (cast(f32) width * 0.5f),
-                    chunk->Center[1] + cast(f32) y - (cast(f32) height * 0.5f),
-                    chunk->Center[2] + cast(f32) z - (cast(f32) depth * 0.5f),
+                    cast(f32) chunk->Position.x + cast(f32) x - (cast(f32) width * 0.5f),
+                    cast(f32) chunk->Position.y + cast(f32) y - (cast(f32) height * 0.5f),
+                    cast(f32) chunk->Position.z + cast(f32) z - (cast(f32) depth * 0.5f),
                 };
                 chunk->Blocks[index] = GetBlock(position);
             }
@@ -101,9 +101,9 @@ void Chunk_RecalculateMesh(Chunk* chunk) {
             for (u32 z = 0; z < chunk->Depth; z++) {
                 u32 index = x + (y * chunk->Width) + (z * chunk->Width * chunk->Height);
                 vec3 position = {
-                    chunk->Center[0] + cast(f32) x - (cast(f32) chunk->Width * 0.5f),
-                    chunk->Center[1] + cast(f32) y - (cast(f32) chunk->Height * 0.5f),
-                    chunk->Center[2] + cast(f32) z - (cast(f32) chunk->Depth * 0.5f),
+                    cast(f32) chunk->Position.x + cast(f32) x - (cast(f32) chunk->Width * 0.5f),
+                    cast(f32) chunk->Position.y + cast(f32) y - (cast(f32) chunk->Height * 0.5f),
+                    cast(f32) chunk->Position.z + cast(f32) z - (cast(f32) chunk->Depth * 0.5f),
                 };
 
                 if (chunk->Blocks[index] == BlockID_Air) {

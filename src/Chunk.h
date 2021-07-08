@@ -12,7 +12,11 @@ typedef enum BlockID {
 } BlockID;
 
 typedef struct Chunk {
-    vec3 Center;
+    struct {
+        s64 x;
+        s64 y;
+        s64 z;
+    } Position;
     u32 Width;
     u32 Height;
     u32 Depth;
@@ -25,7 +29,7 @@ typedef struct Chunk {
     GLuint Shader;
 } Chunk;
 
-void Chunk_Create(Chunk* chunk, vec3 center, u32 width, u32 height, u32 depth, GLuint shader);
+void Chunk_Create(Chunk* chunk, s64 x, s64 y, s64 z, u32 width, u32 height, u32 depth, GLuint shader);
 void Chunk_Destroy(Chunk* chunk);
 
 void Chunk_Draw(Chunk* chunk, Camera* camera);
