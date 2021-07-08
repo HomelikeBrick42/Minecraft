@@ -232,9 +232,9 @@ int main(int argc, char** argv) {
             glm_vec3_cross(forward, right, up);
             glm_vec3_normalize(up);
 
-            f32 MoveSpeed = 4.0f * dt;
+            f32 MoveSpeed = 16.0f * dt;
             if (ShiftPressed) {
-                MoveSpeed *= 10.0f;
+                MoveSpeed *= 4.0f;
             }
 
             if (WPressed) {
