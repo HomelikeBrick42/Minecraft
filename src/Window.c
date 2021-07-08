@@ -58,10 +58,10 @@ static LRESULT CALLBACK WindowMessageCallback(HWND hWnd, UINT message, WPARAM wP
                     GetWindowRect(window->Handle, &windowRect);
                     RECT clipRect = {};
                     AdjustWindowRectEx(&clipRect, WindowStyle, 0, WindowStyleEx);
-                    windowRect.left -= clipRect.left;
-                    windowRect.right -= clipRect.right;
-                    windowRect.top -= clipRect.top;
-                    windowRect.bottom -= clipRect.bottom;
+                    windowRect.left -= clipRect.left + 10;
+                    windowRect.right -= clipRect.right + 10;
+                    windowRect.top -= clipRect.top + 10;
+                    windowRect.bottom -= clipRect.bottom + 10;
                     ClipCursor(&windowRect);
                 }
             } break;
@@ -254,10 +254,10 @@ void Window_LockCursor(Window* window) {
     RECT clipRect = {};
     SetRectEmpty(&clipRect);
     AdjustWindowRectEx(&clipRect, WindowStyle, 0, WindowStyleEx);
-    windowRect.left -= clipRect.left;
-    windowRect.right -= clipRect.right;
-    windowRect.top -= clipRect.top;
-    windowRect.bottom -= clipRect.bottom;
+    windowRect.left -= clipRect.left + 10;
+    windowRect.right -= clipRect.right + 10;
+    windowRect.top -= clipRect.top + 10;
+    windowRect.bottom -= clipRect.bottom + 10;
     ClipCursor(&windowRect);
     ShowCursor(FALSE);
 }
