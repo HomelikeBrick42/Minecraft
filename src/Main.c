@@ -230,7 +230,11 @@ int main(int argc, char** argv) {
     } PSF1_Header;
 
     FILE* fontFile = fopen("font.psf", "rb");
-    ASSERT(fontFile);
+    if (!fontFile) {
+        printf("Unable to load font file!");
+        return -1;
+    }
+
     PSF1_Header header;
     ASSERT(fread(&header, 1, sizeof(PSF1_Header), fontFile) == sizeof(PSF1_Header));
     ASSERT(header.magic[0] == PSF1_MAGIC0);
@@ -242,7 +246,7 @@ int main(int argc, char** argv) {
     fontFile = NULL;
 
     for (u64 y = 0; y < header.charsize; y++) {
-        u8 row = font['H' * header.charsize + y];
+        u8 row = font['a' * header.charsize + y];
         for (u64 x = 0; x < 8; x++) {
             if (row & 0x80) {
                 printf("##");
