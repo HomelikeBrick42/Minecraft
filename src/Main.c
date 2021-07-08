@@ -238,6 +238,8 @@ int main(int argc, char** argv) {
     ASSERT((header.mode & PSF1_MODE512) == 0);
     u8* font = malloc(header.charsize * 256);
     ASSERT(fread(font, 1, header.charsize * 256, fontFile) == header.charsize * 256);
+    fclose(fontFile);
+    fontFile = NULL;
 
     for (u64 y = 0; y < header.charsize; y++) {
         u8 row = font['H' * header.charsize + y];
